@@ -6,11 +6,6 @@ namespace Owin.Security.Strava
 {
     public class StravaReturnEndpointContext : ReturnEndpointContext
     {
-        public StravaReturnEndpointContext(
-            IOwinContext context,
-            AuthenticationTicket ticket)
-            : base(context, ticket)
-        {
-        }
+        public StravaReturnEndpointContext(IOwinContext context, AuthenticationTicket ticket) : base(context, ticket) { }
     }
 }

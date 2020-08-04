@@ -15,14 +15,8 @@ namespace Owin.Security.Strava
 
         public Func<StravaReturnEndpointContext, Task> OnReturnEndpoint { get; set; }
 
-        public virtual Task Authenticated(StravaAuthenticatedContext context)
-        {
-            return OnAuthenticated(context);
-        }
+        public virtual Task Authenticated(StravaAuthenticatedContext context) => OnAuthenticated(context);
 
-        public virtual Task ReturnEndpoint(StravaReturnEndpointContext context)
-        {
-            return OnReturnEndpoint(context);
-        }
+        public virtual Task ReturnEndpoint(StravaReturnEndpointContext context) => OnReturnEndpoint(context);
     }
 }

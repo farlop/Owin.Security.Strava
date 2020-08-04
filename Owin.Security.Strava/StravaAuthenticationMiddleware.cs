@@ -14,11 +14,7 @@ namespace Owin.Security.Strava
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
 
-        public StravaAuthenticationMiddleware(
-            OwinMiddleware next,
-            IAppBuilder app,
-            StravaAuthenticationOptions options)
-            : base(next, options)
+        public StravaAuthenticationMiddleware(OwinMiddleware next, IAppBuilder app, StravaAuthenticationOptions options) : base(next, options)
         {
             if (string.IsNullOrWhiteSpace(Options.ClientId))
             {
@@ -38,9 +34,7 @@ namespace Owin.Security.Strava
 
             if (Options.StateDataFormat == null)
             {
-                IDataProtector dataProtector = app.CreateDataProtector(
-                    typeof(StravaAuthenticationMiddleware).FullName,
-                    Options.AuthenticationType, "v1");
+                IDataProtector dataProtector = app.CreateDataProtector(typeof(StravaAuthenticationMiddleware).FullName, Options.AuthenticationType, "v1");
                 Options.StateDataFormat = new PropertiesDataFormat(dataProtector);
             }
 
@@ -49,26 +43,24 @@ namespace Owin.Security.Strava
                 Options.SignInAsAuthenticationType = app.GetDefaultSignInAsAuthenticationType();
             }
 
-            _httpClient = new HttpClient(ResolveHttpMessageHandler(Options));
-            _httpClient.Timeout = Options.BackchannelTimeout;
-            _httpClient.MaxResponseContentBufferSize = 1024 * 1024 * 10; // 10 MB
+            _httpClient = new HttpClient(ResolveHttpMessageHandler(Options))
+            {
+                Timeout = Options.BackchannelTimeout,
+                MaxResponseContentBufferSize = 1024 * 1024 * 10 // 10 MB
+            };
         }
 
-        protected override AuthenticationHandler<StravaAuthenticationOptions> CreateHandler()
-        {
-            return new StravaAuthenticationHandler(_httpClient, _logger);
-        }
+        protected override AuthenticationHandler<StravaAuthenticationOptions> CreateHandler() => new StravaAuthenticationHandler(_httpClient, _logger);
 
         private static HttpMessageHandler ResolveHttpMessageHandler(StravaAuthenticationOptions options)
         {
-            HttpMessageHandler handler = options.BackchannelHttpHandler ?? new WebRequestHandler();
+            var handler = options.BackchannelHttpHandler ?? new WebRequestHandler();
 
             // If they provided a validator, apply it or fail.
             if (options.BackchannelCertificateValidator != null)
             {
                 // Set the cert validate callback
-                var webRequestHandler = handler as WebRequestHandler;
-                if (webRequestHandler == null)
+                if (!(handler is WebRequestHandler webRequestHandler))
                 {
                     throw new InvalidOperationException("Validator Handler Mismatch");
                 }
@@ -77,6 +69,5 @@ namespace Owin.Security.Strava
 
             return handler;
         }
-
     }
 }

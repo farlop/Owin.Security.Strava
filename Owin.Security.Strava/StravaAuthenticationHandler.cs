@@ -15,8 +15,6 @@ namespace Owin.Security.Strava
     public class StravaAuthenticationHandler : AuthenticationHandler<StravaAuthenticationOptions>
     {
         private const string TokenEndpoint = "https://www.strava.com/oauth/token";
-        private const string GraphApiEndpoint = "https://api.foursquare.com/v2/users/self";
-
         private const string XmlSchemaString = "http://www.w3.org/2001/XMLSchema#string";
         private readonly ILogger _logger;
         private readonly HttpClient _httpClient;
@@ -153,7 +151,10 @@ namespace Owin.Security.Strava
                 GenerateCorrelationId(extra);
 
                 if (Options.Scope.Count == 0)
-                    Options.Scope.Add("public"); // Bad request if there is no scope.
+                {
+                    Options.Scope.Add("read");
+                    Options.Scope.Add("activity:read");
+                } // Bad request if there is no scope.
                 
                 // OAuth2 3.3 space separated
                 string scope = string.Join(" ", Options.Scope);

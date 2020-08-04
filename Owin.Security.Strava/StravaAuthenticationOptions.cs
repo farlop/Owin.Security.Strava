@@ -9,8 +9,7 @@ namespace Owin.Security.Strava
     {
         public const string Scheme = "Strava";
 
-        public StravaAuthenticationOptions()
-            : base(Scheme)
+        public StravaAuthenticationOptions() : base(Scheme)
         {
             Caption = Scheme;
             CallbackPath = "/signin-strava";
@@ -42,6 +41,5 @@ namespace Owin.Security.Strava
         public ISecureDataFormat<AuthenticationProperties> StateDataFormat { get; set; }
 
         public IList<string> Scope { get; private set; }
-
     }
 }

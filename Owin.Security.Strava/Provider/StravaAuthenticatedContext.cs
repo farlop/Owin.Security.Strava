@@ -12,12 +12,7 @@ namespace Owin.Security.Strava
         public StravaAuthenticatedContext(IOwinContext context, JObject user, string accessToken)
             : base(context)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException("user");
-            }
-            
-            User = user;
+            User = user ?? throw new ArgumentNullException("user");
             AccessToken = accessToken;
 
             JToken userId = User["id"];
@@ -74,8 +69,7 @@ namespace Owin.Security.Strava
 
         private static string TryGetValue(JObject user, string propertyName)
         {
-            JToken value;
-            return user.TryGetValue(propertyName, out value) ? value.ToString() : null;
+            return user.TryGetValue(propertyName, out JToken value) ? value.ToString() : null;
         }
     }
 }

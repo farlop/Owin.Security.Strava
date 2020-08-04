@@ -20,18 +20,6 @@ namespace Owin
             return app;
         }
 
-        public static IAppBuilder UseStravaAuthentication(
-            this IAppBuilder app,
-            string clientId,
-            string clientSecret)
-        {
-            return UseStravaAuthentication(
-                app,
-                new StravaAuthenticationOptions
-                {
-                    ClientId = clientId,
-                    ClientSecret = clientSecret
-                });
-        }
+        public static IAppBuilder UseStravaAuthentication(this IAppBuilder app, string clientId, string clientSecret) => UseStravaAuthentication(app, new StravaAuthenticationOptions { ClientId = clientId, ClientSecret = clientSecret });
     }
 }
